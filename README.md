@@ -11,11 +11,11 @@ Nice and gulpy deployment task:
 
 ```javascript
 var gutil = require( 'gulp-util' );
-var Ftp = require( 'vinyl-ftp' );
+var ftp = require( 'vinyl-ftp' );
 
 gulp.task( 'deploy', function() {
 
-	var ftp = new Ftp( {
+	var conn = ftp.create( {
 		host: 'acme.com',
 		user: 'dude',
 		password: 'hello',
@@ -34,8 +34,8 @@ gulp.task( 'deploy', function() {
 	// turn off buffering in gulp.src for best performance
 
 	return gulp.src( globs, { base: '.', buffer: false } )
-		.pipe( ftp.newer( '/test' ) ) // only upload newer files
-		.pipe( ftp.dest( '/test' ) );
+		.pipe( conn.newer( '/test' ) ) // only upload newer files
+		.pipe( conn.dest( '/test' ) );
 
 } );
 ```
@@ -44,19 +44,21 @@ Without Gulp:
 
 ```javascript
 var fs = require( 'vinyl-fs' );
-var Ftp = require( 'vinyl-ftp' );
+var ftp = require( 'vinyl-ftp' );
 
-var ftp = new Ftp( /* ... */ );
+var conn = new ftp( /* ... */ );
 
 fs.src( [ './src/**' ], { buffer: false } )
-	.pipe( ftp.dest( '/dst' ) );
+	.pipe( conn.dest( '/dst' ) );
 ```
 
 ## API
 
-### new Ftp( config )
+`var ftp = require( 'vinyl-ftp' )`
 
-Create a new `vinyl-ftp` instance with the given config. Config options:
+### ftp.create( config )
+
+Return a new `vinyl-ftp` instance with the given config. Config options:
 
 ```
 {
@@ -77,34 +79,38 @@ Create a new `vinyl-ftp` instance with the given config. Config options:
 }
 ```
 
-You can override `parallel` and `keep` per stream in `options`.
+You can override `parallel` and `keep` per stream in their `options`.
 
-### ftp.dest( folder[, options] )
+<hr>
+
+`var conn = ftp.create( config )`
+
+### conn.dest( folder[, options] )
 
 Returns a transform stream that transfers input files to a remote folder.
 All directories are created automatically.
 Passes input files through for further work.
 
-### ftp.mode( folder, mode[, options] )
+### conn.mode( folder, mode[, options] )
 
 Returns a transform stream that sets remote file permissions for each file.
 `mode` must be a string between '0000' and '0777'.
 
-### ftp.newer( folder[, options] )
+### conn.newer( folder[, options] )
 
 Returns a transform stream which filters the input for files
 which are newer than their remote counterpart.
 
-### ftp.differentSize( folder[, options] )
+### conn.differentSize( folder[, options] )
 
 Returns a transform stream which filters the input for files
 which have a different file size than their remote counterpart.
 
-### ftp.newerOrDifferentSize( folder[, options] )
+### conn.newerOrDifferentSize( folder[, options] )
 
 See above.
 
-### ftp.filter( folder, filter[, options] )
+### conn.filter( folder, filter[, options] )
 
 Returns a transform stream that filters the input using a callback.
 The callback should be of this form:

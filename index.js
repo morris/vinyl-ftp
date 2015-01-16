@@ -36,6 +36,12 @@ function VinylFtp( config ) {
 
 }
 
+VinylFtp.create = function( config ) {
+
+	return new VinylFtp( config );
+
+}
+
 assign( VinylFtp.prototype, {
 
 	// vinyl streams, the public api
