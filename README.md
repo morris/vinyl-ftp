@@ -85,32 +85,32 @@ You can override `parallel` and `keep` per stream in their `options`.
 
 `var conn = ftp.create( config )`
 
-### conn.dest( folder[, options] )
+### conn.dest( remoteFolder[, options] )
 
 Returns a transform stream that transfers input files to a remote folder.
 All directories are created automatically.
 Passes input files through for further work.
 
-### conn.mode( folder, mode[, options] )
+### conn.mode( remoteFolder, mode[, options] )
 
 Returns a transform stream that sets remote file permissions for each file.
 `mode` must be a string between '0000' and '0777'.
 
-### conn.newer( folder[, options] )
+### conn.newer( remoteFolder[, options] )
 
 Returns a transform stream which filters the input for files
 which are newer than their remote counterpart.
 
-### conn.differentSize( folder[, options] )
+### conn.differentSize( remoteFolder[, options] )
 
 Returns a transform stream which filters the input for files
 which have a different file size than their remote counterpart.
 
-### conn.newerOrDifferentSize( folder[, options] )
+### conn.newerOrDifferentSize( remoteFolder[, options] )
 
 See above.
 
-### conn.filter( folder, filter[, options] )
+### conn.filter( remoteFolder, filter[, options] )
 
 Returns a transform stream that filters the input using a callback.
 The callback should be of this form:

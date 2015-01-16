@@ -43,7 +43,7 @@ after( function () {
 
 it( 'should upload manual buffer files to FTP-server', function( cb ) {
 
-	var ftp = new Ftp( {
+	var ftp = Ftp.create( {
 		host: 'localhost',
 		port: 3334,
 		user: 'test',
