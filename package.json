@@ -1,0 +1,48 @@
+{
+	"name": "vinyl-ftp",
+	"version": "0.1.0",
+	"description": "Vinyl adapter for FTP",
+	"license": "MIT",
+	"repository": "morris/vinyl-ftp",
+	"author": {
+		"name": "Morris Brodersen",
+		"email": "mb@morrisbrodersen.de",
+		"url": "http://morrisbrodersen.de"
+	},
+	"engines": {
+		"node": ">=0.10.0"
+	},
+	"files": [
+		"index.js"
+	],
+	"scripts": {
+		"test": "mocha"
+	},
+	"keywords": [
+		"vinyl",
+		"gulp",
+		"ftp",
+		"jsftp",
+		"file",
+		"files",
+		"transfer",
+		"protocol",
+		"server",
+		"client",
+		"upload",
+		"deploy",
+		"deployment"
+	],
+	"dependencies": {
+		"ftp": "^0.3.8",
+		"object-assign": "^1.0.0",
+		"parallel-transform": "^0.2.2",
+		"step": "^0.0.5"
+	},
+	"devDependencies": {
+		"ftp-test-server": "^0.0.1",
+		"mocha": "*",
+		"vinyl": "*",
+		"vinyl-fs": "*"
+	}
+}
