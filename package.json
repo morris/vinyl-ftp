@@ -12,9 +12,6 @@
 	"engines": {
 		"node": ">=0.10.0"
 	},
-	"files": [
-		"index.js"
-	],
 	"scripts": {
 		"test": "mocha"
 	},
