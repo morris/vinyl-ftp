@@ -1,8 +1,7 @@
 # vinyl-ftp
 
-Blazing fast vinyl adapter for FTP. Useful for uploads and fast deployment.
-Supports parallel uploads, buffered or streamed files, and more.
-
+Blazing fast vinyl adapter for FTP.
+Supports parallel transfers, conditional transfers, buffered or streamed files, and more.
 Often performs better than your favorite desktop FTP client.
 
 ## Usage
@@ -16,9 +15,9 @@ var ftp = require( 'vinyl-ftp' );
 gulp.task( 'deploy', function() {
 
 	var conn = ftp.create( {
-		host: 'acme.com',
-		user: 'dude',
-		password: 'hello',
+		host:     'mywebsite.tld',
+		user:     'me',
+		password: 'mypass',
 		parallel: 10
 	} );
 
@@ -34,8 +33,8 @@ gulp.task( 'deploy', function() {
 	// turn off buffering in gulp.src for best performance
 
 	return gulp.src( globs, { base: '.', buffer: false } )
-		.pipe( conn.newer( '/test' ) ) // only upload newer files
-		.pipe( conn.dest( '/test' ) );
+		.pipe( conn.newer( '/public_html' ) ) // only upload newer files
+		.pipe( conn.dest( '/public_html' ) );
 
 } );
 ```
@@ -62,20 +61,19 @@ Return a new `vinyl-ftp` instance with the given config. Config options:
 
 ```
 {
-	host:     FTP host,     default is localhost
-	user:     FTP user,     default is anonymous
-	password: FTP password, default is anonymous@
-	port:     FTP port,     default is 21
+	host:       FTP host,     default is localhost
+	user:       FTP user,     default is anonymous
+	password:   FTP password, default is anonymous@
+	port:       FTP port,     default is 21
 
 	log:        Log function, default is null
 	timeOffset: Offset server time by this number of minutes, default is 0
 	parallel:   Number of parallel transfers, default is 3
 	            Don't worry about setting this too high, vinyl-ftp
-	            recovers from "Too many connection" errors nicely.
-	keep:       Keep connections alive after stream ends, default is false
+	            recovers from "Too many connections" errors nicely.
+	keep:       Keep connections alive when streams end, default is false
 	            Remember to have your last stream { keep: false } so
-	            remaining FTP connections are closed on end
-
+	            remaining FTP connections are closed on end.
 }
 ```
 
@@ -89,7 +87,7 @@ You can override `parallel` and `keep` per stream in their `options`.
 
 Returns a transform stream that transfers input files to a remote folder.
 All directories are created automatically.
-Passes input files through for further work.
+Passes input files through.
 
 ### conn.mode( remoteFolder, mode[, options] )
 
@@ -115,11 +113,11 @@ See above.
 Returns a transform stream that filters the input using a callback.
 The callback should be of this form:
 
-```
+```javascript
 function( vinylFile, remoteFile, callback ) {
 
-	// remoteFile holds information about vinylFile's remote counterpart
-	// decide wether vinylFile should be emitted and call callback with boolean
+	// remoteFile holds information about vinylFile's remote counterpart.
+	// Decide wether vinylFile should be emitted and call callback with boolean.
 	// callback is a function( error, emit )
 
 	callback( null, emit );
@@ -127,13 +125,11 @@ function( vinylFile, remoteFile, callback ) {
 }
 ```
 
-## Contributing
-
-Please do!
-
 ## Todo
 
 - add extensive testing
 - implement FTP glob, so we can
 	- implement `src( globs[, opt] )`
 	- implement `watch( globs[, opt, cb] )`
+- add progress events
+- add fine-grained logging
