@@ -156,21 +156,16 @@ assign( VinylFtp.prototype, {
 
 		if ( file.isNull() ) {
 
-			if ( file.stat && file.stat.isDirectory() ) {
-
-				this.mkdirp( path, cb );
-
-			} else {
-
-				cb( null, file );
-
-			}
+			if ( file.stat && file.stat.isDirectory() ) this.mkdirp( path, cb );
+			else cb( null, file );
 
 			return;
 
 		}
 
 		file.pipe( stream, { end: true } );
+
+		var rel;
 
 		step( function() {
 
@@ -185,11 +180,11 @@ assign( VinylFtp.prototype, {
 
 		}, function( err, ftp ) {
 
-			this.parallel()( null, ftp );
+			rel = ftp;
 			if ( err ) throw err;
 
 			self.log( 'PUT ', path );
-			ftp.put( stream, path, this.parallel() );
+			ftp.put( stream, path, this );
 
 			// THE FOLLOWING MUST BE AFTER ftp.put()
 			// Somehow, if you attach a 'data' handler before
@@ -214,9 +209,9 @@ assign( VinylFtp.prototype, {
 
 			}
 
-		}, function( err, ftp ) {
+		}, function( err ) {
 
-			self.release( ftp );
+			self.release( rel );
 			cb( err, file );
 
 		} );
@@ -229,6 +224,7 @@ assign( VinylFtp.prototype, {
 
 			var self = this;
 			var skip = { skip: true }; // unique object
+			var rel;
 
 			this._mkdirp = new ResourceManager( function( path, cb ) {
 
@@ -261,17 +257,16 @@ assign( VinylFtp.prototype, {
 
 				}, function( err, ftp ) {
 
-					this.parallel()( null, ftp );
-
-					if ( err === skip ) { this(); return }
+					rel = ftp;
+					if ( err === skip ) { return true; }
 					if ( err ) throw err;
 
 					self.log( 'MKD ', path );
-					ftp.mkdir( path, this.parallel() );
+					ftp.mkdir( path, this );
 
-				}, function( err, ftp ) {
+				}, function( err ) {
 
-					self.release( ftp );
+					self.release( rel );
 					if ( err ) throw err;
 
 					this();
@@ -292,6 +287,7 @@ assign( VinylFtp.prototype, {
 		if ( this._skipChmod ) cb();
 
 		var self = this;
+		var rel;
 
 		path = this.join( '/', path );
 
@@ -301,16 +297,15 @@ assign( VinylFtp.prototype, {
 
 		}, function( err, ftp ) {
 
-			this.parallel()( null, ftp );
-
+			rel = ftp;
 			if ( err ) throw err;
 
 			self.log( 'SITE', 'CHMOD', mode, path );
-			ftp.site( 'CHMOD ' + mode + ' ' + path, this.parallel() );
+			ftp.site( 'CHMOD ' + mode + ' ' + path, this );
 
-		}, function( err, ftp ) {
+		}, function( err ) {
 
-			self.release( ftp );
+			self.release( rel );
 
 			if ( err && err.code === 550 ) {
 
@@ -379,26 +374,26 @@ assign( VinylFtp.prototype, {
 
 			this._mlsd = new ResourceManager( function( path, cb ) {
 
+				var rel;
+
 				step( function() {
 
 					self.ftp( this );
 
 				}, function( err, ftp ) {
 
-					this.parallel()( null, ftp );
-
+					rel = ftp;
 					if ( err ) throw err;
 
 					self.log( 'MLSD', path );
-					ftp.mlsd( path, this.parallel() );
+					ftp.mlsd( path, this );
 
-				}, function( err, ftp, files ) {
+				}, function( err,  files ) {
 
-					self.release( ftp );
+					self.release( rel );
 
 					// no such file or directory
 					if ( err && ( err.code === 501 || err.code === 550 ) ) return [];
-
 					if ( err ) throw err;
 
 					return files.filter( function( file ) {
@@ -427,22 +422,23 @@ assign( VinylFtp.prototype, {
 
 			this._list = new ResourceManager( function( path, cb ) {
 
+				var rel;
+
 				step( function() {
 
 					self.ftp( this );
 
 				}, function( err, ftp ) {
 
-					this.parallel()( null, ftp );
-
+					rel = ftp;
 					if ( err ) throw err;
 
 					self.log( 'LIST', path );
-					ftp.list( path, this.parallel() );
+					ftp.list( path, this );
 
-				}, function( err, ftp, files ) {
+				}, function( err, files ) {
 
-					self.release( ftp );
+					self.release( rel );
 
 					if ( err && err.code === 550 ) return []; // no such file or directory
 					if ( err ) throw err;
