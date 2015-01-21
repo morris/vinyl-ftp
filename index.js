@@ -8,7 +8,6 @@ var assign = require( 'object-assign' );
 var Stream = require( 'stream' );
 var Path = require( 'path' );
 var parallel = require( 'parallel-transform' );
-var step = require( 'step' );
 
 var Ftp = require( 'ftp' );
 Ftp.prototype.mlsd = require( './mlsd' );
@@ -28,7 +27,7 @@ function VinylFtp( config ) {
 		log:        null,
 		timeOffset: 0,
 		keep:       false,
-		password:   config.password || config.pass,
+		password:   config.password || config.pass
 	}, config );
 
 	this.available = [];
@@ -110,20 +109,20 @@ assign( VinylFtp.prototype, {
 
 			var path = self.join( '/', folder, file.relative );
 
-			step( function() {
+			self.remote( path, onRemote );
 
-				self.remote( path, this );
+			function onRemote( err, remote ) {
 
-			}, function( err, remote ) {
+				if ( err ) return cb( err );
+				filter( file, remote, onFilter );
 
-				if ( err ) throw err;
-				filter( file, remote, this );
+			}
 
-			}, function( err, emit ) {
+			function onFilter( err, emit ) {
 
 				cb( err, emit ? file : null );
 
-			} );
+			}
 
 		}, options );
 
@@ -165,26 +164,25 @@ assign( VinylFtp.prototype, {
 
 		file.pipe( stream, { end: true } );
 
+		// ensure that parent directory exists
+		self.mkdirp( Path.dirname( path ), onParent );
+
+		function onParent( err ) {
+
+			if ( err ) return final( err );
+			self.ftp( onFtp );
+
+		}
+
 		var rel;
 
-		step( function() {
-
-			// ensure that parent directory exists
-			self.mkdirp( Path.dirname( path ), this );
-
-		}, function( err ) {
-
-			if ( err ) throw err;
-
-			self.ftp( this );
-
-		}, function( err, ftp ) {
+		function onFtp( err, ftp ) {
 
 			rel = ftp;
-			if ( err ) throw err;
+			if ( err ) return final( err );
 
 			self.log( 'PUT ', path );
-			ftp.put( stream, path, this );
+			ftp.put( stream, path, final ); // no timeout
 
 			// THE FOLLOWING MUST BE AFTER ftp.put()
 			// Somehow, if you attach a 'data' handler before
@@ -209,12 +207,14 @@ assign( VinylFtp.prototype, {
 
 			}
 
-		}, function( err ) {
+		}
+
+		function final( err ) {
 
 			self.release( rel );
 			cb( err, file );
 
-		} );
+		}
 
 	},
 
@@ -223,55 +223,55 @@ assign( VinylFtp.prototype, {
 		if ( !this._mkdirp ) {
 
 			var self = this;
-			var skip = { skip: true }; // unique object
-			var rel;
 
 			this._mkdirp = new ResourceManager( function( path, cb ) {
 
 				// skip if path is root
 				if ( path === '/' || path === '' ) {
 
-					cb();
+					final();
 					return;
 
 				}
 
-				step( function() {
+				self.remote( path, onRemote );
 
-					self.remote( path, this );
+				function onRemote( err, remote ) {
 
-				}, function( err, file ) {
-
-					if ( err ) throw err;
-					if ( file && file.type !== 'dir' ) throw new Error( path + ' is a file, cannot MKDIR' );
-					if ( file ) throw skip; // skip if path is already directory
+					if ( err ) return final( err );
+					if ( remote && remote.type !== 'dir' ) return final( new Error( path + ' is a file, cannot MKDIR' ) );
+					if ( remote ) return final(); // skip if exists
 
 					// ensure that parent directory exists
-					self.mkdirp( Path.dirname( path ), this );
+					self.mkdirp( Path.dirname( path ), onParent );
 
-				}, function( err ) {
+				}
 
-					if ( err ) throw err;
+				function onParent( err ) {
 
-					self.ftp( this );
+					if ( err ) return final( err );
+					self.ftp( onFtp );
 
-				}, function( err, ftp ) {
+				}
+
+				var rel;
+
+				function onFtp( err, ftp ) {
 
 					rel = ftp;
-					if ( err === skip ) { return true; }
-					if ( err ) throw err;
+					if ( err ) return final( err );
 
 					self.log( 'MKD ', path );
-					ftp.mkdir( path, this );
+					ftp.mkdir( path, final );
 
-				}, function( err ) {
+				}
+
+				function final( err ) {
 
 					self.release( rel );
-					if ( err ) throw err;
+					cb( err );
 
-					this();
-
-				}, cb );
+				}
 
 			} );
 
@@ -284,85 +284,65 @@ assign( VinylFtp.prototype, {
 
 	chmod: function( path, mode, cb ) {
 
-		if ( this._skipChmod ) cb();
-
 		var self = this;
+		path = this.join( '/', path );
 		var rel;
 
-		path = this.join( '/', path );
+		self.ftp( onFtp );
 
-		step( function() {
-
-			self.ftp( this );
-
-		}, function( err, ftp ) {
+		function onFtp( err, ftp ) {
 
 			rel = ftp;
-			if ( err ) throw err;
+			if ( err ) return final( err );
 
 			self.log( 'SITE', 'CHMOD', mode, path );
-			ftp.site( 'CHMOD ' + mode + ' ' + path, this );
+			ftp.site( 'CHMOD ' + mode + ' ' + path, final );
 
-		}, function( err ) {
+		}
+
+		function final( err ) {
 
 			self.release( rel );
+			cb( err );
 
-			if ( err && err.code === 550 ) {
-
-				self.log( 'ERR  CHMOD not supported, skipping subsequent calls' );
-				this._skipChmod = true;
-
-			} else if ( err ) {
-
-				throw err;
-
-			}
-
-			this();
-
-		}, cb );
+		}
 
 	},
 
 	remote: function( path, cb ) {
 
 		var self = this;
-
 		path = this.join( '/', path );
 		var basename = Path.basename( path );
 		var dirname = Path.dirname( path );
 
-		step( function() {
+		self.mlsd( dirname, onMlsd );
 
-			self.mlsd( dirname, this );
-
-		}, function( err, files ) {
+		function onMlsd( err, files ) {
 
 			if ( err && err.code === 502 ) { // mlsd not implemented
 
-				self.list( dirname, this );
-				return;
+				return self.list( dirname, onFiles );
 
 			}
 
-			if ( err ) throw err;
+			onFiles( err, files );
 
-			return files;
+		}
 
+		function onFiles( err, files ) {
 
-		}, function( err, files ) {
-
-			if ( err ) throw err;
+			if ( err ) return cb( err );
 
 			for ( var i = 0; i < files.length; ++i ) {
 
-				if ( files[ i ].name === basename ) return files[ i ];
+				if ( files[ i ].name === basename ) return cb( null, files[ i ] );
 
 			}
 
-			return null;
+			cb();
 
-		}, cb );
+		}
 
 	},
 
@@ -376,34 +356,36 @@ assign( VinylFtp.prototype, {
 
 				var rel;
 
-				step( function() {
+				self.ftp( onFtp );
 
-					self.ftp( this );
-
-				}, function( err, ftp ) {
+				function onFtp( err, ftp ) {
 
 					rel = ftp;
 					if ( err ) throw err;
 
 					self.log( 'MLSD', path );
-					ftp.mlsd( path, this );
+					ftp.mlsd( path, onMlsd );
 
-				}, function( err,  files ) {
+				}
+
+				function onMlsd( err,  files ) {
 
 					self.release( rel );
 
 					// no such file or directory
-					if ( err && ( err.code === 501 || err.code === 550 ) ) return [];
-					if ( err ) throw err;
+					if ( err && ( err.code === 501 || err.code === 550 ) ) return cb( null, [] );
+					if ( err ) return cb( err );
 
-					return files.filter( function( file ) {
+					files = files.filter( function( file ) {
 
 						file.date = self.fixDate( file.date );
 						return file.name !== '.' && file.name !== '..';
 
 					} );
 
-				}, cb );
+					cb( null, files );
+
+				}
 
 			} );
 
@@ -424,33 +406,40 @@ assign( VinylFtp.prototype, {
 
 				var rel;
 
-				step( function() {
+				self.ftp( onFtp );
 
-					self.ftp( this );
-
-				}, function( err, ftp ) {
+				function onFtp( err, ftp ) {
 
 					rel = ftp;
-					if ( err ) throw err;
+					if ( err ) return final( err );
 
 					self.log( 'LIST', path );
-					ftp.list( path, this );
+					ftp.list( path, onFiles );
 
-				}, function( err, files ) {
+				}
 
-					self.release( rel );
+				function onFiles( err, files ) {
 
 					if ( err && err.code === 550 ) return []; // no such file or directory
-					if ( err ) throw err;
+					if ( err ) return final( err );
 
-					return files.filter( function( file ) {
+					files = files.filter( function( file ) {
 
 						file.date = self.fixDate( file.date );
 						return file.name !== '.' && file.name !== '..';
 
 					} );
 
-				}, cb );
+					final( null, files );
+
+				}
+
+				function final( err, files ) {
+
+					self.release( rel );
+					cb( err, files );
+
+				}
 
 			} );
 
@@ -477,7 +466,7 @@ assign( VinylFtp.prototype, {
 
 		ftp.on( 'ready', function() {
 
-			ftp.vinylFtpUsed = true;
+			ftp._ftpUsed = true;
 			cb( null, ftp );
 
 		} );
@@ -485,12 +474,12 @@ assign( VinylFtp.prototype, {
 		ftp.on( 'error', function( err ) {
 
 			self.log( 'ERR ', err );
-			ftp.vinylFtpError = err;
+			ftp._ftpError = err;
 
 			// only retry callback on connection/first error
-			if ( !ftp.vinylFtpUsed ) {
+			if ( !ftp._ftpUsed ) {
 
-				ftp.vinylFtpUsed = true;
+				ftp._ftpUsed = true;
 				self.queue.push( cb );
 
 			}
@@ -535,7 +524,7 @@ assign( VinylFtp.prototype, {
 
 		this.available = [];
 
-		if ( err ) throw err;
+		if ( err ) self.log( 'ERR ', err );
 
 	},
 
