@@ -473,7 +473,8 @@ assign( VinylFtp.prototype, {
 
 		ftp.on( 'error', function( err ) {
 
-			self.log( 'ERR ', err );
+			var code = err.code ? (' (' + err.code + ')') : '';
+			self.log( 'ERR  ' + err.message + code );
 			ftp._ftpError = err;
 
 			// only retry callback on connection/first error
