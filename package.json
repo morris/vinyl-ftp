@@ -9,6 +9,10 @@
     "email": "mb@morrisbrodersen.de",
     "url": "http://morrisbrodersen.de"
   },
+  "files": [
+    "index.js",
+    "lib"
+  ],
   "engines": {
     "node": ">=0.10.0"
   },
@@ -19,26 +23,22 @@
     "vinyl",
     "gulp",
     "ftp",
-    "jsftp",
-    "file",
-    "files",
-    "transfer",
-    "protocol",
-    "server",
-    "client",
-    "upload",
     "deploy",
-    "deployment"
+    "deployment",
+    "upload"
   ],
   "dependencies": {
     "ftp": "^0.3.8",
+    "parallel-transform": "^0.2.2",
     "object-assign": "^1.0.0",
-    "parallel-transform": "^0.2.2"
+    "minimatch": "~2.0.1",
+    "vinyl": "~0.4.6",
+    "through2": "~0.6.3"
   },
   "devDependencies": {
     "ftp-test-server": "^0.0.1",
     "mocha": "*",
-    "vinyl": "*",
-    "vinyl-fs": "*"
+    "vinyl-fs": "*",
+    "rmdir": "~1.0.4"
   }
 }
