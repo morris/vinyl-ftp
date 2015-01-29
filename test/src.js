@@ -7,13 +7,14 @@ var fs = require( 'fs' );
 var rmdir = require( 'rmdir' );
 var File = require( 'vinyl' );
 var VinylFs = require( 'vinyl-fs' );
+var through = require( 'through2' );
 
 var setup = require( './setup' );
 
-it( 'should upload to FTP-server (streamed)', uploadTest( { buffer: false } ) );
-it( 'should upload to FTP-server (buffered)', uploadTest() );
+it( 'should download (buffered)', test() );
+it( 'should download (streamed)', test( { buffer: false } ) );
 
-function uploadTest( fsOpt, ftpOpt ) {
+function test( ftpOpt ) {
 
 	return function( done ) {
 
@@ -23,8 +24,8 @@ function uploadTest( fsOpt, ftpOpt ) {
 
 		function mid() {
 
-			VinylFs.src( 'test/src/**', fsOpt )
-				.pipe( setup.vftp.dest( 'test/dest', ftpOpt ) )
+			setup.vftp.src( 'test/src/**', ftpOpt )
+				.pipe( VinylFs.dest( 'test/dest' ) )
 				.on( 'end', end );
 
 		}

@@ -66,15 +66,16 @@ Return a new `vinyl-ftp` instance with the given config. Config options:
 - __log:__        Log function, default is null
 - __timeOffset:__ Offset server time by this number of minutes, default is 0
 - __parallel:__   Number of parallel transfers, default is 3
-Don't worry about setting this too high, vinyl-ftp
-recovers from "Too many connections" errors nicely.
 - __maxConnections:__ Maximum number of connections, should be greater or
 equal to "parallel". Default is 5, or the parallel setting, if any.
+Don't worry about setting this too high, vinyl-ftp
+recovers from "Too many connections" errors nicely.
 - __keep:__       Keep connections alive when streams end, default is false
 Remember to have your last stream { keep: false } so
 remaining FTP connections are closed on end.
+- __reload:__     Clear caches before (each) stream
 
-You can override `parallel` and `keep` per stream in their `options`.
+You can override `parallel`, `keep` and `reload` per stream in their `options`.
 
 <hr>
 
@@ -83,7 +84,9 @@ You can override `parallel` and `keep` per stream in their `options`.
 ### conn.src( globs[, options] )
 
 Returns a vinyl file stream that emits remote files matched by the given
-globs. Possible options:
+globs.
+The remote files have a `file.ftp` property containing remote information.
+Possible options:
 
 - __cwd:__ Set as file.cwd, default is `/`.
 - __base:__ Set as file.base, default is glob beginning. This is used to determine the file names when saving in .dest().
