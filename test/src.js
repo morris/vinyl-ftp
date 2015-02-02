@@ -7,9 +7,8 @@ var fs = require( 'fs' );
 var rmdir = require( 'rmdir' );
 var File = require( 'vinyl' );
 var VinylFs = require( 'vinyl-fs' );
-var through = require( 'through2' );
 
-var setup = require( './setup' );
+var suite = require( './suite' );
 
 it( 'should download (buffered)', test() );
 it( 'should download (streamed)', test( { buffer: false } ) );
@@ -24,24 +23,32 @@ function test( ftpOpt ) {
 
 		function mid() {
 
-			setup.vftp.src( 'test/src/**', ftpOpt )
+			suite.vftp.src( 'test/src/**', ftpOpt )
 				.pipe( VinylFs.dest( 'test/dest' ) )
-				.on( 'end', end );
+				.on( 'end', check );
 
 		}
 
-		function end() {
+		function check() {
 
-			assert( fs.existsSync( 'test/dest/index.html' ) );
+			var expected = [
+				'css',
+				'css/normalize.css',
+				'css/style.css',
+				//'empty', vinyl-fs does not create directories
+				'js',
+				'js/jquery.js',
+				'js/script.js',
+				'index.html'
+			];
 
-			rmdir( 'test/src', function( err ) {
-				if ( err ) return done( err );
-				rmdir( 'test/dest', function( err ) {
-					if ( err ) return done( err );
-					done();
+			suite.expectFiles( 'test/dest/**', expected, final );
 
-				} );
-			} );
+		}
+
+		function final( err ) {
+
+			suite.cleanup( err, done );
 
 		}
 

@@ -8,12 +8,12 @@ var rmdir = require( 'rmdir' );
 var File = require( 'vinyl' );
 var VinylFs = require( 'vinyl-fs' );
 
-var setup = require( './setup' );
+var suite = require( './suite' );
 
-it( 'should upload to FTP-server (streamed)', uploadTest( { buffer: false } ) );
-it( 'should upload to FTP-server (buffered)', uploadTest() );
+it( 'should upload (streamed)', test( { buffer: false } ) );
+it( 'should upload (buffered)', test() );
 
-function uploadTest( fsOpt, ftpOpt ) {
+function test( fsOpt, ftpOpt ) {
 
 	return function( done ) {
 
@@ -24,23 +24,31 @@ function uploadTest( fsOpt, ftpOpt ) {
 		function mid() {
 
 			VinylFs.src( 'test/src/**', fsOpt )
-				.pipe( setup.vftp.dest( 'test/dest', ftpOpt ) )
-				.on( 'end', end );
+				.pipe( suite.vftp.dest( 'test/dest', ftpOpt ) )
+				.on( 'end', check );
 
 		}
 
-		function end() {
+		function check() {
 
-			assert( fs.existsSync( 'test/dest/index.html' ) );
+			var expected = [
+				'css',
+				'css/normalize.css',
+				'css/style.css',
+				'empty',
+				'js',
+				'js/jquery.js',
+				'js/script.js',
+				'index.html'
+			];
 
-			rmdir( 'test/src', function( err ) {
-				if ( err ) return done( err );
-				rmdir( 'test/dest', function( err ) {
-					if ( err ) return done( err );
-					done();
+			suite.expectFiles( 'test/dest/**', expected, final );
 
-				} );
-			} );
+		}
+
+		function final( err ) {
+
+			suite.cleanup( err, done );
 
 		}
 
