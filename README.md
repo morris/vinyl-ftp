@@ -9,6 +9,7 @@ Often performs better than your favorite desktop FTP client.
 Nice and gulpy deployment task:
 
 ```javascript
+var gulp = require( 'gulp' );
 var gutil = require( 'gulp-util' );
 var ftp = require( 'vinyl-ftp' );
 
@@ -18,7 +19,8 @@ gulp.task( 'deploy', function() {
 		host:     'mywebsite.tld',
 		user:     'me',
 		password: 'mypass',
-		parallel: 10
+		parallel: 10,
+		log: gutil.log
 	} );
 
 	var globs = [
