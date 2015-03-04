@@ -9,10 +9,11 @@
 var Server = require( 'ftp-test-server' );
 var VinylFtp = require( '../' );
 var VinylFs = require( 'vinyl-fs' );
-var suite = module.exports = {};
 var expect = require( 'expect' );
 var rmdir = require( 'rmdir' );
 var Path = require( 'path' );
+
+var suite = module.exports = {};
 
 before( function( done ) {
 
