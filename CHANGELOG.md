@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3.4
+
+- Added 450 code for LIST/No such file
+
 ## v0.3.3
 
 - Fixed checking for directories on various servers
