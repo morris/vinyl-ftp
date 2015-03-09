@@ -39,6 +39,8 @@ function test( fsOpt, ftpOpt ) {
 				'js',
 				'js/jquery.js',
 				'js/script.js',
+				'js/sub',
+				'js/sub/sub.js',
 				'index.html'
 			];
 

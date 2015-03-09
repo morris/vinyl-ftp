@@ -42,6 +42,8 @@ beforeEach( function( done ) {
 		log: console.log
 	} );
 
+	suite.vftp.noMlsd = true;
+
 	done();
 
 } );
