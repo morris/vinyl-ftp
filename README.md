@@ -143,6 +143,15 @@ function( localFile, remoteFile, callback ) {
 }
 ```
 
+### conn.delete( path, cb )
+
+Deletes a file.
+
+### conn.rmdir( path, cb )
+
+Removes a directory, recursively.
+
+
 ## Todo
 
 - implement `watch( globs[, opt, cb] )`
