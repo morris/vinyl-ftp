@@ -36,6 +36,7 @@ assign(
 	require( './lib/filter' ),
 	require( './lib/src' ),
 	require( './lib/dest' ),
+	require( './lib/delete' ),
 	require( './lib/mode' ),
 	require( './lib/ftp' ),
 	require( './lib/helpers' )

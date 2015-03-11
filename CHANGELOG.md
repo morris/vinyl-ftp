@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.4.0
+
+- Improved tests some more
+- Added `delete` and `rmdir`
+
 ## v0.3.4
 
 - Added 450 code for LIST/No such file

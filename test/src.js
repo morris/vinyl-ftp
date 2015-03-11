@@ -2,7 +2,7 @@
  * @author morris
  */
 
-var assert = require( 'assert' );
+var expect = require( 'expect' );
 var fs = require( 'fs' );
 var rmdir = require( 'rmdir' );
 var File = require( 'vinyl' );
@@ -17,40 +17,29 @@ function test( ftpOpt ) {
 
 	return function( done ) {
 
-		VinylFs.src( 'test/fixtures/**' )
-			.pipe( VinylFs.dest( 'test/src' ) )
-			.on( 'end', mid );
+		this.timeout( 5000 );
 
-		function mid() {
-
-			suite.vftp.src( 'test/src/**', ftpOpt )
-				.pipe( VinylFs.dest( 'test/dest' ) )
-				.on( 'end', check );
-
-		}
+		suite.vftp.src( 'test/dest/**', ftpOpt )
+			.pipe( VinylFs.dest( 'test/download' ) )
+			.on( 'error', cleanup )
+			.on( 'end', check );
 
 		function check() {
 
-			var expected = [
-				'css',
-				'css/normalize.css',
-				'css/style.css',
-				//'empty', vinyl-fs does not create directories
-				'js',
-				'js/jquery.js',
-				'js/script.js',
-				'js/sub',
-				'js/sub/sub.js',
-				'index.html'
-			];
+			expect( suite.log ).toMatch( /DOWN/ );
+			expect( suite.log ).toMatch( /100\%/ );
 
-			suite.expectFiles( 'test/dest/**', expected, final );
+			cleanup();
 
 		}
 
-		function final( err ) {
+		function cleanup( err ) {
 
-			suite.cleanup( err, done );
+			rmdir( 'test/download', function( err ) {
+
+				done( err );
+
+			} );
 
 		}
 

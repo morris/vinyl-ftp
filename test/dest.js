@@ -2,10 +2,7 @@
  * @author morris
  */
 
-var assert = require( 'assert' );
-var fs = require( 'fs' );
-var rmdir = require( 'rmdir' );
-var File = require( 'vinyl' );
+var expect = require( 'expect' );
 var VinylFs = require( 'vinyl-fs' );
 
 var suite = require( './suite' );
@@ -17,40 +14,19 @@ function test( fsOpt, ftpOpt ) {
 
 	return function( done ) {
 
-		VinylFs.src( 'test/fixtures/**' )
-			.pipe( VinylFs.dest( 'test/src' ) )
-			.on( 'end', mid );
+		this.timeout( 5000 );
 
-		function mid() {
-
-			VinylFs.src( 'test/src/**', fsOpt )
-				.pipe( suite.vftp.dest( 'test/dest', ftpOpt ) )
-				.on( 'end', check );
-
-		}
+		VinylFs.src( 'test/fixtures/**', fsOpt )
+			.pipe( suite.vftp.dest( 'test/dest', ftpOpt ) )
+			.on( 'error', done )
+			.on( 'end', check );
 
 		function check() {
 
-			var expected = [
-				'css',
-				'css/normalize.css',
-				'css/style.css',
-				'empty',
-				'js',
-				'js/jquery.js',
-				'js/script.js',
-				'js/sub',
-				'js/sub/sub.js',
-				'index.html'
-			];
+			expect( suite.log ).toMatch( /UP/ );
+			expect( suite.log ).toMatch( /100\%/ );
 
-			suite.expectFiles( 'test/dest/**', expected, final );
-
-		}
-
-		function final( err ) {
-
-			suite.cleanup( err, done );
+			done();
 
 		}
 
