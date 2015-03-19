@@ -24,7 +24,7 @@ function VinylFtp( config ) {
 
 }
 
-VinylFtp.create = function( config ) {
+VinylFtp.create = function ( config ) {
 
 	return new VinylFtp( config );
 

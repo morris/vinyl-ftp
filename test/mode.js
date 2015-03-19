@@ -14,7 +14,8 @@ it( 'should set the mode', function( done ) {
 
 	this.timeout( 5000 );
 
-	VinylFs.src( 'test/fixtures/**' )
+	suite.vftp.glob( 'test/dest/**' )
+	//VinylFs.src( 'test/fixtures/**' )
 		.pipe( suite.vftp.mode( 'test/dest', '0777' ) )
 		.on( 'error', done )
 		.on( 'end', check );
