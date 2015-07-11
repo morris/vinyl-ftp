@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4.2
+
+- Fixed MLSD bug(s)
+
 ## v0.4.0
 
 - Improved tests some more
