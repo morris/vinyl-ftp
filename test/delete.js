@@ -3,10 +3,11 @@
  */
 
 var expect = require( 'expect' );
-
 var suite = require( './suite' );
 
 it( 'should clean', function( done ) {
+
+	done = suite.done( done );
 
 	this.timeout( 10000 );
 

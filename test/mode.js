@@ -12,6 +12,8 @@ var suite = require( './suite' );
 
 it( 'should set the mode', function( done ) {
 
+	done = suite.done( done );
+
 	this.timeout( 5000 );
 
 	suite.vftp.glob( 'test/dest/**' )

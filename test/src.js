@@ -15,7 +15,9 @@ it( 'should download (streamed)', test( { buffer: false } ) );
 
 function test( ftpOpt ) {
 
-	return function( done ) {
+	return function ( done ) {
+
+		done = suite.done( done );
 
 		this.timeout( 5000 );
 
@@ -35,7 +37,7 @@ function test( ftpOpt ) {
 
 		function cleanup( err ) {
 
-			rmdir( 'test/download', function( err ) {
+			rmdir( 'test/download', function ( err ) {
 
 				done( err );
 

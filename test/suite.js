@@ -2,29 +2,38 @@
  * @author morris
  */
 
+var expect = require( 'expect' );
 var VinylFtp = require( '../' );
 
 var suite = module.exports = {};
 suite.config = require( './config.json' );
-suite.config.log = function() {
+suite.config.log = function () {
 
 	var args = Array.prototype.slice.call( arguments, 0 );
 	suite.log += args.join( ' ' );
 	console.log.apply( console, arguments );
 
 };
+suite.done = function ( done ) {
 
-beforeEach( function( done ) {
+	return function () {
+
+		setTimeout( function () {
+
+			expect( suite.vftp.connectionCount ).toBe( 0 );
+			done();
+
+		}, 200 );
+
+	};
+
+};
+
+beforeEach( function ( done ) {
 
 	suite.log = '';
 	suite.vftp = VinylFtp.create( suite.config );
 
 	done();
-
-} );
-
-afterEach( function() {
-
-	suite.vftp.disconnect();
 
 } );

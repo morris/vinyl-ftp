@@ -13,14 +13,15 @@ function VinylFtp( config ) {
 		maxConnections: config.parallel || 5,
 		log:            null,
 		timeOffset:     0,
-		keep:           false,
+		idleTimeout:    100,
 		password:       config.password || config.pass
 	}, config );
 
 	// connection pool
-	this.used = [];
-	this.available = [];
 	this.queue = [];
+	this.connectionCount = 0;
+	this.idle = [];
+	this.idleTimer = null;
 
 }
 

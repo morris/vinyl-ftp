@@ -14,6 +14,8 @@ function test( fsOpt, ftpOpt ) {
 
 	return function( done ) {
 
+		done = suite.done( done );
+
 		this.timeout( 5000 );
 
 		VinylFs.src( 'test/fixtures/**', fsOpt )
