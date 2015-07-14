@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4.3
+
+- Fixed MLSD always falling back to list
+
 ## v0.4.2
 
 - Fixed MLSD bug(s)
