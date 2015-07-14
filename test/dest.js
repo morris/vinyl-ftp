@@ -12,7 +12,7 @@ it( 'should upload (buffered)', test() );
 
 function test( fsOpt, ftpOpt ) {
 
-	return function( done ) {
+	return function ( done ) {
 
 		done = suite.done( done );
 

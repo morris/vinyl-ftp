@@ -5,20 +5,20 @@
 var expect = require( 'expect' );
 var suite = require( './suite' );
 
-it( 'should mkdirp', function( done ) {
+it( 'should mkdirp', function ( done ) {
 
 	done = suite.done( done );
 
 	this.timeout( 5000 );
 
-	suite.vftp.mkdirp( '/test/src/foo/bar', function( err ) {
+	suite.vftp.mkdirp( '/test/src/foo/bar', function ( err ) {
 
 		if ( err ) return done( err );
 		check();
 
 	} );
 
-	suite.vftp.mkdirp( '/test/src/foo/bar', function( err ) {
+	suite.vftp.mkdirp( '/test/src/foo/bar', function ( err ) {
 
 		if ( err ) return done( err );
 		check();

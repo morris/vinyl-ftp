@@ -10,7 +10,7 @@ var VinylFs = require( 'vinyl-fs' );
 
 var suite = require( './suite' );
 
-it( 'should set the mode', function( done ) {
+it( 'should set the mode', function ( done ) {
 
 	done = suite.done( done );
 

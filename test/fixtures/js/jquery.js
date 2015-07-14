@@ -1,1 +1,1 @@
-$ = function( selector ) { console.log( selector ) };
+$ = function ( selector ) { console.log( selector ) };

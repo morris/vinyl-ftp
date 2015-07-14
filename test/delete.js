@@ -5,7 +5,7 @@
 var expect = require( 'expect' );
 var suite = require( './suite' );
 
-it( 'should clean', function( done ) {
+it( 'should clean', function ( done ) {
 
 	done = suite.done( done );
 
