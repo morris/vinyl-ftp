@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.4.4
+
+- Improved connection pool
+    - Connections stay alive for a configurable amount of time (`idleTimeout`)
+    - Higher number of reused connections, slight performance gain
+    - `keep` is now obsolete
+    - Fixed #19 with test (concurrency problems)
+- Improved tests
+
 ## v0.4.3
 
 - Fixed MLSD always falling back to list

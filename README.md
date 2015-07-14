@@ -20,7 +20,7 @@ gulp.task( 'deploy', function() {
 		user:     'me',
 		password: 'mypass',
 		parallel: 10,
-		log: gutil.log
+		log:      gutil.log
 	} );
 
 	var globs = [
@@ -61,23 +61,21 @@ fs.src( [ './src/**' ], { buffer: false } )
 
 Return a new `vinyl-ftp` instance with the given config. Config options:
 
-- __host:__       FTP host,     default is localhost
-- __user:__       FTP user,     default is anonymous
-- __pass[word]:__ FTP password, default is anonymous@
-- __port:__       FTP port,     default is 21
-- __log:__        Log function, default is null
-- __timeOffset:__ Offset server time by this number of minutes, default is 0
-- __parallel:__   Number of parallel transfers, default is 3
+- __host:__        FTP host,     default is localhost
+- __user:__        FTP user,     default is anonymous
+- __pass[word]:__  FTP password, default is anonymous@
+- __port:__        FTP port,     default is 21
+- __log:__         Log function, default is null
+- __timeOffset:__  Offset server time by this number of minutes, default is 0
+- __parallel:__    Number of parallel transfers, default is 3
 - __maxConnections:__ Maximum number of connections, should be greater or
-equal to "parallel". Default is 5, or the parallel setting, if any.
+equal to "parallel". Default is 5, or the parallel setting.
 Don't worry about setting this too high, vinyl-ftp
 recovers from "Too many connections" errors nicely.
-- __keep:__       Keep connections alive when streams end, default is false
-Remember to have your last stream { keep: false } so
-remaining FTP connections are closed on end.
-- __reload:__     Clear caches before (each) stream
+- __reload:__      Clear caches before (each) stream
+- __idleTimeout:__ Time to keep idle FTP connections (milliseconds), default is 100
 
-You can override `parallel`, `keep` and `reload` per stream in their `options`.
+You can override `parallel` and `reload` per stream in their `options`.
 
 <hr>
 
@@ -150,8 +148,3 @@ Deletes a file.
 ### conn.rmdir( path, cb )
 
 Removes a directory, recursively.
-
-
-## Todo
-
-- implement `watch( globs[, opt, cb] )`
