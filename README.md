@@ -13,7 +13,7 @@ var gulp = require( 'gulp' );
 var gutil = require( 'gulp-util' );
 var ftp = require( 'vinyl-ftp' );
 
-gulp.task( 'deploy', function() {
+gulp.task( 'deploy', function () {
 
 	var conn = ftp.create( {
 		host:     'mywebsite.tld',
@@ -53,6 +53,9 @@ fs.src( [ './src/**' ], { buffer: false } )
 	.pipe( conn.dest( '/dst' ) );
 ```
 
+*Remember not to push FTP credentials to public repos!*
+
+
 ## API
 
 `var ftp = require( 'vinyl-ftp' )`
@@ -72,8 +75,9 @@ Return a new `vinyl-ftp` instance with the given config. Config options:
 equal to "parallel". Default is 5, or the parallel setting.
 Don't worry about setting this too high, vinyl-ftp
 recovers from "Too many connections" errors nicely.
-- __reload:__      Clear caches before (each) stream
+- __reload:__      Clear caches before (each) stream, default is false
 - __idleTimeout:__ Time to keep idle FTP connections (milliseconds), default is 100
+- __debug:__       A debug callback that gets extensive debug information, default is null
 
 You can override `parallel` and `reload` per stream in their `options`.
 
@@ -129,7 +133,7 @@ Returns a transform stream that filters the input using a callback.
 The callback should be of this form:
 
 ```javascript
-function( localFile, remoteFile, callback ) {
+function ( localFile, remoteFile, callback ) {
 
 	// localFile and remoteFile are vinyl files.
 	// Check remoteFile.ftp for remote information.
