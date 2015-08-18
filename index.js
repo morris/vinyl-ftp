@@ -14,7 +14,8 @@ function VinylFtp( config ) {
 		log:            null,
 		timeOffset:     0,
 		idleTimeout:    100,
-		password:       config.password || config.pass
+		password:       config.password || config.pass,
+		reload:         false
 	}, config );
 
 	// connection pool
