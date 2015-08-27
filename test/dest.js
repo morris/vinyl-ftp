@@ -4,34 +4,65 @@
 
 var expect = require( 'expect' );
 var VinylFs = require( 'vinyl-fs' );
+var VinylFtp = require( '../' );
 
 var suite = require( './suite' );
 
-it( 'should upload (streamed)', test( { buffer: false } ) );
-it( 'should upload (buffered)', test() );
+describe( 'dest', function () {
 
-function test( fsOpt, ftpOpt ) {
+	it( 'should upload (streamed)', test( { buffer: false } ) );
+	it( 'should upload (buffered)', test() );
 
-	return function ( done ) {
+	function test( fsOpt, ftpOpt ) {
 
-		done = suite.done( done );
+		return function ( done ) {
 
-		this.timeout( 5000 );
+			done = suite.done( done );
 
-		VinylFs.src( 'test/fixtures/**', fsOpt )
-			.pipe( suite.vftp.dest( 'test/dest', ftpOpt ) )
-			.on( 'error', done )
-			.on( 'end', check );
+			this.timeout( 10000 );
 
-		function check() {
+			VinylFs.src( 'test/fixtures/**', fsOpt )
+				.pipe( suite.vftp.dest( 'test/dest', ftpOpt ) )
+				.on( 'error', done )
+				.on( 'end', check );
 
-			expect( suite.log ).toMatch( /UP/ );
-			expect( suite.log ).toMatch( /100\%/ );
+			function check() {
 
-			done();
+				expect( suite.log ).toMatch( /UP/ );
+				expect( suite.log ).toMatch( /100\%/ );
+
+				done();
+
+			}
 
 		}
 
 	}
 
-}
+	it( 'should report an error on incorrect login', function ( done ) {
+
+		done = suite.done( done );
+
+		this.timeout( 10000 );
+
+		var vftp = VinylFtp.create( {
+			user: 'fake',
+			log: console.log.bind( console )
+		} );
+
+		VinylFs.src( 'test/fixtures/**' )
+			.pipe( vftp.dest( 'test/dest' ) )
+			.on( 'error', check );
+			//.on( 'finish', check )
+			//.on( 'end', check );
+
+		function check( err ) {
+
+			expect( err ).toBeA( Error );
+			done();
+
+		}
+
+	} );
+
+} );

@@ -14,6 +14,7 @@ suite.config.log = function () {
 	console.log.apply( console, arguments );
 
 };
+//suite.config.debug = suite.config.log;
 suite.done = function ( done ) {
 
 	return function () {

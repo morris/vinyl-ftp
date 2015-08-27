@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4.5
+
+- Fixed #30 - connections errors are now properly emitted
+
 ## v0.4.4
 
 - Improved connection pool

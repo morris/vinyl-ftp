@@ -19,7 +19,7 @@ function test( ftpOpt ) {
 
 		done = suite.done( done );
 
-		this.timeout( 5000 );
+		this.timeout( 10000 );
 
 		suite.vftp.src( 'test/dest/**', ftpOpt )
 			.pipe( VinylFs.dest( 'test/download' ) )
