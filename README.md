@@ -82,8 +82,15 @@ recovers from "Too many connections" errors nicely.
 - __reload:__      Clear caches before (each) stream, default is false
 - __idleTimeout:__ Time to keep idle FTP connections (milliseconds), default is 100
 - __debug:__       A debug callback that gets extensive debug information, default is null
+- __secure:__      Set `true` for secured FTP connections
 
 You can override `parallel` and `reload` per stream in their `options`.
+
+In order to connect to secure FTP with expired or self-signed certificate define:
+
+`process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";`
+
+before starting the connection.
 
 <hr>
 
