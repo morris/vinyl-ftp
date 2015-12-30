@@ -86,11 +86,11 @@ recovers from "Too many connections" errors nicely.
 
 You can override `parallel` and `reload` per stream in their `options`.
 
-In order to connect to secure FTP with expired or self-signed certificate define:
+In order to connect to secure FTP with expired or self-signed certificate add:
 
-`process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";`
+`secureOptions: { rejectUnauthorized: false }`
 
-before starting the connection.
+to the connection configuration settings.
 
 <hr>
 
