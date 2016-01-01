@@ -83,14 +83,9 @@ recovers from "Too many connections" errors nicely.
 - __idleTimeout:__ Time to keep idle FTP connections (milliseconds), default is 100
 - __debug:__       A debug callback that gets extensive debug information, default is null
 - __secure:__      Set `true` for secured FTP connections
+- __secureOptions:__ Set `{ rejectUnauthorized: false }` for self-signed or expired secure FTP connections
 
 You can override `parallel` and `reload` per stream in their `options`.
-
-In order to connect to secure FTP with expired or self-signed certificate add:
-
-`secureOptions: { rejectUnauthorized: false }`
-
-to the connection configuration settings.
 
 <hr>
 
