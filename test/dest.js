@@ -46,6 +46,7 @@ describe( 'dest', function () {
 		this.timeout( 10000 );
 
 		var vftp = VinylFtp.create( {
+			host: suite.config.host,
 			user: 'fake',
 			log: console.log.bind( console )
 		} );
