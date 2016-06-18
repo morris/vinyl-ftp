@@ -24,7 +24,7 @@ suite.done = function ( done ) {
 			expect( suite.vftp.connectionCount ).toBe( 0 );
 			done();
 
-		}, 200 );
+		}, 400 );
 
 	};
 

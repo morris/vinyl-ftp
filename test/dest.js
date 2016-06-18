@@ -10,6 +10,12 @@ var suite = require( './suite' );
 
 describe( 'dest', function () {
 
+	this.timeout( 10000 );
+
+	beforeEach( function ( done ) {
+		suite.vftp.rmdir( 'test', done );
+	} );
+
 	it( 'should upload (streamed)', test( { buffer: false } ) );
 	it( 'should upload (buffered)', test() );
 
@@ -18,8 +24,6 @@ describe( 'dest', function () {
 		return function ( done ) {
 
 			done = suite.done( done );
-
-			this.timeout( 10000 );
 
 			VinylFs.src( 'test/fixtures/**', fsOpt )
 				.pipe( suite.vftp.dest( 'test/dest', ftpOpt ) )
@@ -35,9 +39,34 @@ describe( 'dest', function () {
 
 			}
 
-		}
+		};
 
 	}
+
+	it( 'should upload concurrently', function ( done ) {
+
+		done = suite.done( done );
+
+		upload();
+		upload();
+		upload();
+
+		function upload() {
+			VinylFs.src( [ 'test/fixtures/js/sub/sub.js', 'test/fixtures/js/sub/sub.js' ] )
+				.pipe( suite.vftp.dest( 'test/lol/rofl/afk' ) )
+				.on( 'error', check )
+				.on( 'end', check );
+		}
+
+		var i = 0;
+
+		function check( err ) {
+			if ( err ) return done( err );
+			++i;
+			return i < 3 || done();
+		}
+
+	} );
 
 	it( 'should report an error on incorrect login', function ( done ) {
 
