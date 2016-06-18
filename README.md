@@ -82,6 +82,8 @@ recovers from "Too many connections" errors nicely.
 - __reload:__      Clear caches before (each) stream, default is false
 - __idleTimeout:__ Time to keep idle FTP connections (milliseconds), default is 100
 - __debug:__       A debug callback that gets extensive debug information, default is null
+- __secure:__      Set `true` for secured FTP connections
+- __secureOptions:__ Set `{ rejectUnauthorized: false }` for self-signed or expired secure FTP connections
 
 You can override `parallel` and `reload` per stream in their `options`.
 
