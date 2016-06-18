@@ -29,16 +29,16 @@
   ],
   "dependencies": {
     "ftp": "^0.3.8",
-    "minimatch": "~2.0.1",
-    "object-assign": "^1.0.0",
-    "parallel-transform": "^0.2.2",
-    "through2": "~0.6.3",
-    "vinyl": "~0.4.6"
+    "minimatch": "^3.0.2",
+    "object-assign": "^4.1.0",
+    "parallel-transform": "^1.0.0",
+    "through2": "^2.0.1",
+    "vinyl": "^1.1.1"
   },
   "devDependencies": {
-    "expect": "^1.6.0",
-    "mocha": "*",
-    "rmdir": "~1.0.4",
-    "vinyl-fs": "*"
+    "expect": "^1.20.1",
+    "mocha": "^2.5.3",
+    "rmdir": "^1.2.0",
+    "vinyl-fs": "^2.4.3"
   }
 }

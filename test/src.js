@@ -36,15 +36,11 @@ function test( ftpOpt ) {
 		}
 
 		function cleanup( err ) {
-
-			rmdir( 'test/download', function ( err ) {
-
+			rmdir( 'test/download', function ( err2 ) {
 				done( err );
-
 			} );
-
 		}
 
-	}
+	};
 
 }

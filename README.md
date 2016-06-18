@@ -158,3 +158,7 @@ Deletes a file.
 ### conn.rmdir( path, cb )
 
 Removes a directory, recursively.
+
+### conn.clean( globs, local[, options] )
+
+Globs remote files, tests if they are locally available at `<local>/<remote.relative>` and removes them if not.

@@ -41,5 +41,6 @@ assign(
 	require( './lib/delete' ),
 	require( './lib/mode' ),
 	require( './lib/ftp' ),
-	require( './lib/helpers' )
+	require( './lib/helpers' ),
+	require( './lib/clean' )
 );

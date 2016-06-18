@@ -4,7 +4,6 @@
 
 var expect = require( 'expect' );
 var fs = require( 'fs' );
-var rmdir = require( 'rmdir' );
 var File = require( 'vinyl' );
 var VinylFs = require( 'vinyl-fs' );
 

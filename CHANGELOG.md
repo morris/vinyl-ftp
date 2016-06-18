@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.5.0
+
+- Fixed #3
+- Fixed #54
+- Added `clean`
+- Updated dependencies
+
 ## v0.4.5
 
 - Fixed #30 - connections errors are now properly emitted
