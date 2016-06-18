@@ -41,7 +41,7 @@ describe( 'clean', function () {
 
 		done = suite.done( done );
 
-		suite.vftp.clean( 'test/clean/**', 'test/cleaning' )
+		suite.vftp.clean( 'test/clean/**', 'test/fixtures' )
 			.on( 'error', done )
 			.on( 'end', check );
 
