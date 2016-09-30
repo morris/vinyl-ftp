@@ -33,11 +33,11 @@
     "object-assign": "^4.1.0",
     "parallel-transform": "^1.0.0",
     "through2": "^2.0.1",
-    "vinyl": "^1.1.1"
+    "vinyl": "^2.0.0"
   },
   "devDependencies": {
     "expect": "^1.20.1",
-    "mocha": "^2.5.3",
+    "mocha": "^3.1.0",
     "rmdir": "^1.2.0",
     "vinyl-fs": "^2.4.3"
   }
