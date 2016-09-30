@@ -1,7 +1,3 @@
-/**
- * @author morris
- */
-
 var assign = require( 'object-assign' );
 
 module.exports = VinylFtp;

@@ -1,7 +1,3 @@
-/**
- * @author morris
- */
-
 var expect = require( 'expect' );
 var fs = require( 'fs' );
 var rmdir = require( 'rmdir' );

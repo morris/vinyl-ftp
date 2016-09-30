@@ -1,11 +1,8 @@
-/**
- * @author morris
- */
-
 var expect = require( 'expect' );
 var VinylFtp = require( '../' );
 
 var suite = module.exports = {};
+
 suite.config = require( './config.json' );
 suite.config.log = function () {
 

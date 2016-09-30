@@ -1,7 +1,3 @@
-/**
- * @author morris
- */
-
 var expect = require( 'expect' );
 var suite = require( './suite' );
 

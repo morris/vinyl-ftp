@@ -1,7 +1,3 @@
-/**
- * @author morris
- */
-
 var expect = require( 'expect' );
 var VinylFs = require( 'vinyl-fs' );
 var VinylFtp = require( '../' );

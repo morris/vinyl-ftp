@@ -1,7 +1,3 @@
-/**
- * @author morris
- */
-
 var expect = require( 'expect' );
 var VinylFs = require( 'vinyl-fs' );
 var VinylFtp = require( '../' );
@@ -14,10 +10,12 @@ describe( 'clean', function () {
 	this.timeout( 10000 );
 
 	it( '(preparing: create files to clean up later)', function ( done ) {
+
 		VinylFs.src( 'test/fixtures/**' )
 			.pipe( VinylFs.dest( 'test/fixtures/cleaning' ) )
 			.on( 'error', done )
 			.on( 'end', done );
+
 	} );
 
 	it( '(preparing: upload all files)', function ( done ) {
