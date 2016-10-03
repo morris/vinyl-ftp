@@ -1,4 +1,4 @@
-var expect = require( 'expect' );
+var assert = require( 'assert' );
 var fs = require( 'fs' );
 var File = require( 'vinyl' );
 var VinylFs = require( 'vinyl-fs' );
@@ -19,7 +19,7 @@ it( 'should set the mode', function ( done ) {
 
 	function check( err ) {
 
-		expect( suite.log ).toMatch( /SITE  CHMOD 0777/ );
+		assert.ok( suite.log.match( /SITE  CHMOD 0777/ ) );
 
 		done();
 

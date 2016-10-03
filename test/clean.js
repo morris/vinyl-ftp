@@ -1,4 +1,4 @@
-var expect = require( 'expect' );
+var assert = require( 'assert' );
 var VinylFs = require( 'vinyl-fs' );
 var VinylFtp = require( '../' );
 var rmdir = require( 'rmdir' );
@@ -45,8 +45,8 @@ describe( 'clean', function () {
 
 		function check() {
 
-			expect( suite.log ).toMatch( /DEL/ );
-			expect( suite.log ).toMatch( /RMDIR/ );
+			assert.ok( suite.log.match( /DEL/ ) );
+			assert.ok( suite.log.match( /RMDIR/ ) );
 			done();
 
 		}

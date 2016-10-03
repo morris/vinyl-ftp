@@ -1,4 +1,4 @@
-var expect = require( 'expect' );
+var assert = require( 'assert' );
 var suite = require( './suite' );
 
 it( 'should clean', function ( done ) {
@@ -20,8 +20,8 @@ it( 'should clean', function ( done ) {
 
 		if ( err ) return done( err );
 
-		expect( suite.log ).toMatch( /DEL/ );
-		expect( suite.log ).toMatch( /RMDIR/ );
+		assert( suite.log.match( /DEL/ ) );
+		assert( suite.log.match( /RMDIR/ ) );
 
 		done();
 

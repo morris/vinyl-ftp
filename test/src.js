@@ -1,4 +1,4 @@
-var expect = require( 'expect' );
+var assert = require( 'assert' );
 var fs = require( 'fs' );
 var rmdir = require( 'rmdir' );
 var File = require( 'vinyl' );
@@ -24,8 +24,8 @@ function test( ftpOpt ) {
 
 		function check() {
 
-			expect( suite.log ).toMatch( /DOWN/ );
-			expect( suite.log ).toMatch( /100\%/ );
+			assert( suite.log.match( /DOWN/ ) );
+			assert( suite.log.match( /100\%/ ) );
 
 			cleanup();
 

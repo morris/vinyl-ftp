@@ -1,4 +1,3 @@
-var expect = require( 'expect' );
 var suite = require( './suite' );
 var vfs = require( 'vinyl-fs' );
 
