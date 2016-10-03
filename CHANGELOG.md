@@ -3,6 +3,7 @@
 ## master
 
 - Updated dependencies
+- Improved test suite
 
 ## v0.5.0
 

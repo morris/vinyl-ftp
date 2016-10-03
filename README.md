@@ -2,7 +2,6 @@
 
 [![version](https://img.shields.io/npm/v/vinyl-ftp.svg)](https://www.npmjs.com/package/vinyl-ftp)
 [![downloads](https://img.shields.io/npm/dm/vinyl-ftp.svg)](https://www.npmjs.com/package/vinyl-ftp)
-[![tips](https://img.shields.io/gratipay/morris.svg)](https://gratipay.com/~morris/)
 
 Blazing fast vinyl adapter for FTP.
 Supports parallel transfers, conditional transfers, buffered or streamed files, and more.
@@ -162,3 +161,7 @@ Removes a directory, recursively.
 ### conn.clean( globs, local[, options] )
 
 Globs remote files, tests if they are locally available at `<local>/<remote.relative>` and removes them if not.
+
+## Development
+
+- Run tests with `CONFIG=test/config/yourserver.json npm test`

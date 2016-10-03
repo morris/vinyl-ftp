@@ -17,7 +17,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "istanbul cover node_modules/mocha/bin/_mocha test"
   },
   "keywords": [
     "vinyl",
@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "expect": "^1.20.1",
+    "istanbul": "^0.4.5",
     "mocha": "^3.1.0",
     "rmdir": "^1.2.0",
     "vinyl-fs": "^2.4.3"
