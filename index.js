@@ -4,6 +4,8 @@ module.exports = VinylFtp;
 
 function VinylFtp( config ) {
 
+	if ( !( this instanceof VinylFtp ) ) return new VinylFtp( config );
+
 	this.config = assign( {
 		parallel:       3,
 		maxConnections: config.parallel || 5,
@@ -28,15 +30,18 @@ VinylFtp.create = function ( config ) {
 
 };
 
+VinylFtp.prototype.glob = require( './lib/glob' );
+VinylFtp.prototype.src = require( './lib/src' );
+VinylFtp.prototype.dest = require( './lib/dest' );
+VinylFtp.prototype.delete = require( './lib/delete' );
+VinylFtp.prototype.rmdir = require( './lib/rmdir' );
+VinylFtp.prototype.dest = require( './lib/dest' );
+VinylFtp.prototype.clean = require( './lib/clean' );
+
 assign(
 	VinylFtp.prototype,
-	require( './lib/glob' ),
 	require( './lib/filter' ),
-	require( './lib/src' ),
-	require( './lib/dest' ),
-	require( './lib/delete' ),
 	require( './lib/mode' ),
 	require( './lib/ftp' ),
-	require( './lib/helpers' ),
-	require( './lib/clean' )
+	require( './lib/helpers' )
 );

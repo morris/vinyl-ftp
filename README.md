@@ -90,7 +90,7 @@ You can override `parallel` and `reload` per stream in their `options`.
 
 `var conn = ftp.create( config )`
 
-### conn.src( globs[, options] )
+### conn.src( globs[, options] ) <small>STREAM</small>
 
 Returns a vinyl file stream that emits remote files matched by the given
 globs.
@@ -107,32 +107,32 @@ Glob-related options are documented at [minimatch](https://www.npmjs.com/package
 
 <hr>
 
-### conn.dest( remoteFolder[, options] )
+### conn.dest( remoteFolder[, options] ) <small>STREAM</small>
 
 Returns a transform stream that transfers input files to a remote folder.
 All directories are created automatically.
 Passes input files through.
 
-### conn.mode( remoteFolder, mode[, options] )
+### conn.mode( remoteFolder, mode[, options] ) <small>STREAM</small>
 
 Returns a transform stream that sets remote file permissions for each file.
 `mode` must be a string between '0000' and '0777'.
 
-### conn.newer( remoteFolder[, options] )
+### conn.newer( remoteFolder[, options] ) <small>STREAM</small>
 
 Returns a transform stream which filters the input for files
 which are newer than their remote counterpart.
 
-### conn.differentSize( remoteFolder[, options] )
+### conn.differentSize( remoteFolder[, options] ) <small>STREAM</small>
 
 Returns a transform stream which filters the input for files
 which have a different file size than their remote counterpart.
 
-### conn.newerOrDifferentSize( remoteFolder[, options] )
+### conn.newerOrDifferentSize( remoteFolder[, options] ) <small>STREAM</small>
 
 See above.
 
-### conn.filter( remoteFolder, filter[, options] )
+### conn.filter( remoteFolder, filter[, options] ) <small>STREAM</small>
 
 Returns a transform stream that filters the input using a callback.
 The callback should be of this form:
@@ -150,15 +150,15 @@ function ( localFile, remoteFile, callback ) {
 }
 ```
 
-### conn.delete( path, cb )
+### conn.delete( path, cb ) <small>CALLBACK</small>
 
 Deletes a file.
 
-### conn.rmdir( path, cb )
+### conn.rmdir( path, cb ) <small>CALLBACK</small>
 
 Removes a directory, recursively.
 
-### conn.clean( globs, local[, options] )
+### conn.clean( globs, local[, options] ) <small>STREAM</small>
 
 Globs remote files, tests if they are locally available at `<local>/<remote.relative>` and removes them if not.
 
