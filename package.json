@@ -1,6 +1,6 @@
 {
   "name": "vinyl-ftp",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Vinyl adapter for FTP",
   "license": "MIT",
   "repository": "morris/vinyl-ftp",
