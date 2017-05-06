@@ -1,34 +1,34 @@
-/**
- * @author morris
- */
-
-var expect = require( 'expect' );
+var assert = require( 'assert' );
 var suite = require( './suite' );
 
-it( 'should clean', function ( done ) {
+describe( 'delete', function () {
 
-	done = suite.done( done );
+	it( 'should delete', function ( done ) {
 
-	this.timeout( 15000 );
+		done = suite.done( done );
 
-	suite.vftp.delete( 'test/dest/index.html', check );
-	suite.vftp.rmdir( 'test', check );
+		this.timeout( 15000 );
 
-	var i = 0;
+		suite.vftp.delete( 'test/dest/index.html', check );
+		suite.vftp.rmdir( 'test', check );
 
-	function check( err ) {
+		var i = 0;
 
-		++i;
+		function check( err ) {
 
-		if ( i < 2 ) return;
+			++i;
 
-		if ( err ) return done( err );
+			if ( i < 2 ) return;
 
-		expect( suite.log ).toMatch( /DEL/ );
-		expect( suite.log ).toMatch( /RMDIR/ );
+			if ( err ) return done( err );
 
-		done();
+			assert( suite.log.match( /DEL/ ) );
+			assert( suite.log.match( /RMDIR/ ) );
 
-	}
+			done();
+
+		}
+
+	} );
 
 } );

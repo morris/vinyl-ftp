@@ -1,6 +1,6 @@
 {
   "name": "vinyl-ftp",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Vinyl adapter for FTP",
   "license": "MIT",
   "repository": "morris/vinyl-ftp",
@@ -17,7 +17,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "istanbul cover node_modules/mocha/bin/_mocha test"
   },
   "keywords": [
     "vinyl",
@@ -30,15 +30,15 @@
   "dependencies": {
     "ftp": "^0.3.8",
     "minimatch": "^3.0.2",
-    "object-assign": "^4.1.0",
-    "parallel-transform": "^1.0.0",
-    "through2": "^2.0.1",
-    "vinyl": "^1.1.1"
+    "object-assign": "^4.1.1",
+    "parallel-transform": "^1.1.0",
+    "through2": "^2.0.3",
+    "vinyl": "^2.0.1"
   },
   "devDependencies": {
-    "expect": "^1.20.1",
-    "mocha": "^2.5.3",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.2.0",
     "rmdir": "^1.2.0",
-    "vinyl-fs": "^2.4.3"
+    "vinyl-fs": "^2.4.4"
   }
 }

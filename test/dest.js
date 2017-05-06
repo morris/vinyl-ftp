@@ -1,8 +1,4 @@
-/**
- * @author morris
- */
-
-var expect = require( 'expect' );
+var assert = require( 'assert' );
 var VinylFs = require( 'vinyl-fs' );
 var VinylFtp = require( '../' );
 
@@ -32,8 +28,8 @@ describe( 'dest', function () {
 
 			function check() {
 
-				expect( suite.log ).toMatch( /UP/ );
-				expect( suite.log ).toMatch( /100\%/ );
+				assert( suite.log.match( /UP/ ) );
+				assert( suite.log.match( /100\%/ ) );
 
 				done();
 
@@ -88,7 +84,7 @@ describe( 'dest', function () {
 
 		function check( err ) {
 
-			expect( err ).toBeA( Error );
+			assert.ok( err instanceof Error );
 			done();
 
 		}

@@ -1,12 +1,15 @@
-/**
- * @author morris
- */
-
-var expect = require( 'expect' );
+var fs = require( 'fs' );
+var assert = require( 'assert' );
 var VinylFtp = require( '../' );
 
 var suite = module.exports = {};
-suite.config = require( './config.json' );
+
+if ( !process.env.CONFIG ) {
+	console.log( 'Missing CONFIG environment variable' );
+	process.exit( 1 );
+}
+
+suite.config = JSON.parse( fs.readFileSync( process.env.CONFIG ) );
 suite.config.log = function () {
 
 	var args = Array.prototype.slice.call( arguments, 0 );
@@ -14,14 +17,14 @@ suite.config.log = function () {
 	console.log.apply( console, arguments );
 
 };
-//suite.config.debug = suite.config.log;
+
 suite.done = function ( done ) {
 
 	return function () {
 
 		setTimeout( function () {
 
-			expect( suite.vftp.connectionCount ).toBe( 0 );
+			assert.equal( suite.vftp.connectionCount, 0 );
 			done();
 
 		}, 1000 );
