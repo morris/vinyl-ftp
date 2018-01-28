@@ -11,8 +11,17 @@ describe( 'clean', function () {
 
 	it( '(preparing: create files to clean up later)', function ( done ) {
 
-		VinylFs.src( 'test/fixtures/**' )
-			.pipe( VinylFs.dest( 'test/fixtures/cleaning' ) )
+		VinylFs.src( 'test/fixtures/index.html' )
+			.pipe( VinylFs.dest( 'test/fixtures/cleanthis' ) )
+			.on( 'error', done )
+			.on( 'end', done );
+
+	} );
+
+	it( '(preparing: create files to ignore in cleanup)', function ( done ) {
+
+		VinylFs.src( 'test/fixtures/index.html' )
+			.pipe( VinylFs.dest( 'test/fixtures/dontcleanthis' ) )
 			.on( 'error', done )
 			.on( 'end', done );
 
@@ -31,22 +40,27 @@ describe( 'clean', function () {
 
 	it( '(preparing: remove files to clean)', function ( done ) {
 
-		rmdir( 'test/fixtures/cleaning', done );
+		rmdir( 'test/fixtures/cleanthis', done );
 
 	} );
 
-	it( 'should clean up extra remote files', function ( done ) {
+	it( '(preparing: remove files to ignore in cleanup)', function ( done ) {
+
+		rmdir( 'test/fixtures/dontcleanthis', done );
+
+	} );
+
+	it( 'should clean up extra remote files but repect ignore rules', function ( done ) {
 
 		done = suite.done( done );
 
-		suite.vftp.clean( 'test/clean/**', 'test/fixtures' )
+		suite.vftp.clean( [ 'test/clean/**/*', '!test/clean/dontcleanthis/**/*' ], 'test/fixtures' )
 			.on( 'error', done )
 			.on( 'end', check );
 
 		function check() {
-
-			assert.ok( suite.log.match( /DEL/ ) );
-			assert.ok( suite.log.match( /RMDIR/ ) );
+			assert.ok( suite.log.match( /RMDIR(.)*test\/clean\/cleanthis/ ) );
+			assert.equal( suite.log.match( /RMDIR(.)*test\/clean\/dontcleanthis/ ), null );
 			done();
 
 		}
